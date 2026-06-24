@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Writing Agent · KAINDLY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-tint:#f4f0fa;
+    --bg-tint-2:#ede7f7;
+    --ink:#1a1a1a;
+    --ink-2:#3d3d3d;
+    --ink-3:#6b6b6b;
+    --rule:#e4e0ec;
+    --rule-soft:#efecf5;
+    --accent:#6940b8;
+    --accent-2:#7d54cf;
+    --accent-soft:#9f7fd9;
+    --shadow:rgba(40,20,80,.12);
+    --shadow-strong:rgba(40,20,80,.20);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.55;
+    -webkit-font-smoothing:antialiased;min-height:100vh;
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:38px 26px 120px;position:relative;z-index:2}
+  .lbl-mono{font-family:'Inter';font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+  .diamond::before{content:'◆';color:var(--accent);font-size:.7em;margin-right:.7em;vertical-align:.08em}
+
+  header.masthead{border-bottom:1px solid var(--rule);padding-bottom:16px;margin-bottom:8px;
+    display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);flex-shrink:0}
+  .brand .bn{font-family:'Inter';font-weight:700;font-size:1rem;letter-spacing:.2em}
+  .masthead .right{font-family:'Inter';font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);text-align:right}
+  .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;font-weight:600}
+
+  .progress-rail{height:3px;background:var(--rule-soft);border-radius:99px;margin:22px 0 8px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-soft));width:0;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .step-label{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);display:flex;justify-content:space-between}
+  .resume-flag{color:var(--accent);letter-spacing:.08em;text-transform:none;font-weight:600}
+
+  .stage{display:none;animation:rise .55s cubic-bezier(.16,1,.3,1)}
+  .stage.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  h1{font-family:'Fraunces';font-weight:500;font-size:clamp(2.7rem,7.5vw,4.4rem);line-height:1.02;letter-spacing:-.02em;margin:24px 0 0}
+  h1 em{font-style:italic;color:var(--accent)}
+  .lede{font-size:clamp(1.05rem,2.4vw,1.32rem);line-height:1.5;color:var(--ink-2);margin:22px 0 0;max-width:60ch;font-weight:400}
+  .lede em{font-style:italic;color:var(--accent);font-family:'Fraunces';font-weight:500}
+  h2{font-family:'Fraunces';font-weight:500;font-size:clamp(1.9rem,4.6vw,2.7rem);line-height:1.08;letter-spacing:-.01em;margin:0 0 8px}
+  .q-num{font-size:.74rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:12px}
+  .helptext{color:var(--ink-3);font-size:.96rem;margin:0 0 22px;max-width:60ch}
+  .helptext.tight{margin-bottom:14px}
+  .helptext b{color:var(--ink-2);font-weight:600}
+
+  .components{margin:30px 0;border-top:1px solid var(--rule)}
+  .comp-row{display:flex;gap:18px;padding:16px 2px;border-bottom:1px solid var(--rule);align-items:baseline}
+  .comp-row .n{font-family:'Inter';font-weight:600;color:var(--accent);font-size:.82rem;letter-spacing:.1em;min-width:30px}
+  .comp-row .t{font-weight:600;color:var(--ink)}
+  .comp-row .d{color:var(--ink-3);font-size:.92rem}
+
+  label.field{display:block;margin-bottom:8px;font-weight:600;font-size:.92rem}
+  input[type=text],textarea,select{
+    width:100%;background:#fff;border:1.5px solid var(--rule);border-radius:11px;
+    padding:14px 16px;font-family:'Inter';font-size:1rem;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+  textarea{resize:vertical;min-height:96px;line-height:1.5}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(105,64,184,.13)}
+  ::placeholder{color:#a9a2b8}
+  .eg{font-size:1rem;color:var(--ink-3);font-style:italic;margin-top:7px;font-family:'Fraunces'}
+  .field-warn{font-size:.86rem;color:var(--accent);margin-top:9px;font-weight:600;display:none}
+  .field-warn.show{display:block}
+
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:4px}
+  .chip{padding:9px 15px;border:1.5px solid var(--rule);border-radius:99px;background:#fff;cursor:pointer;
+    font-size:.88rem;font-weight:500;transition:all .18s;user-select:none;color:var(--ink-2)}
+  .chip:hover{border-color:var(--accent-soft);transform:translateY(-1px)}
+  .chip:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(105,64,184,.22)}
+  .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .chip-hint{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:12px}
+  .suggest-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:2px 0 9px}
+
+  .arc-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .arc-item{border:1.5px solid var(--rule);border-radius:12px;background:#fff;overflow:hidden;transition:all .18s}
+  .arc-item:hover{border-color:var(--accent-soft)}
+  .arc-item.on{border-color:var(--accent);background:var(--bg-tint)}
+  .arc-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+  .arc-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--rule);flex-shrink:0;display:grid;place-items:center;transition:all .18s;background:#fff}
+  .arc-item.on .arc-check{background:var(--accent);border-color:var(--accent)}
+  .arc-check svg{width:12px;height:12px;opacity:0;transition:opacity .18s}
+  .arc-item.on .arc-check svg{opacity:1}
+  .arc-title{font-weight:600;flex:1;font-size:.96rem}
+  .arc-toggle{font-size:.7rem;font-weight:600;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;background:none;border:none;cursor:pointer;padding:4px 8px;flex-shrink:0}
+  .arc-desc{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 16px;color:var(--ink-3);font-size:.9rem}
+  .arc-desc.open{max-height:260px;padding:0 16px 16px 48px}
+  .arc-desc .ex{font-family:'Fraunces';font-style:italic;font-size:1.04rem;color:var(--ink-2);display:block;margin-top:6px}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;gap:14px}
+  button.btn{font-family:'Inter';font-weight:600;font-size:.95rem;cursor:pointer;border:none;border-radius:99px;padding:14px 30px;transition:all .2s}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 18px -6px var(--accent)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px -8px var(--accent);background:var(--accent-2)}
+  .btn-primary:disabled{background:var(--rule);color:var(--ink-3);box-shadow:none;cursor:not-allowed;transform:none}
+  .btn-ghost{background:transparent;color:var(--ink-2);border:1.5px solid var(--rule)}
+  .btn-ghost:hover{color:var(--ink);border-color:var(--accent)}
+  .btn-big{background:var(--accent);color:#fff;padding:17px 40px;font-size:1.05rem;box-shadow:0 8px 22px -6px var(--accent)}
+  .btn-big:hover{transform:translateY(-2px);background:var(--accent-2)}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+
+  .name-display{font-family:'Fraunces';font-style:italic;color:var(--accent);font-size:clamp(2.2rem,6vw,3.4rem);margin:8px 0;min-height:1.1em}
+
+  .voice-toggle{display:flex;align-items:center;gap:12px;background:var(--bg-tint);border:1.5px solid var(--rule);border-radius:12px;padding:12px 16px;margin:18px 0 6px}
+  .voice-toggle .vt-ic{width:34px;height:34px;border-radius:8px;background:#fff;border:1.5px solid var(--rule);display:grid;place-items:center;flex-shrink:0}
+  .voice-toggle .vt-ic svg{width:17px;height:17px;fill:var(--accent)}
+  .voice-toggle .vt-txt{flex:1}
+  .voice-toggle .vt-txt b{font-size:.92rem}
+  .voice-toggle .vt-txt span{display:block;font-size:.8rem;color:var(--ink-3)}
+  .switch{position:relative;width:46px;height:26px;flex-shrink:0;cursor:pointer}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#cfc8dd;border-radius:99px;transition:.25s}
+  .slider::before{content:'';position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .switch input:checked + .slider{background:var(--accent)}
+  .switch input:checked + .slider::before{transform:translateX(20px)}
+  .mic-btn{display:inline-flex;align-items:center;gap:7px;margin-top:10px;background:#fff;border:1.5px solid var(--rule);color:var(--ink-2);border-radius:99px;padding:9px 16px;font-family:'Inter';font-weight:600;font-size:.84rem;cursor:pointer;transition:all .2s}
+  .mic-btn:hover{border-color:var(--accent);color:var(--ink)}
+  .mic-btn.rec{background:var(--accent);color:#fff;border-color:var(--accent);animation:pulse 1.3s infinite}
+  .mic-btn svg{width:15px;height:15px;fill:currentColor}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(105,64,184,.5)}50%{box-shadow:0 0 0 8px rgba(105,64,184,0)}}
+  .mic-unsupported{font-size:.78rem;color:var(--ink-3);margin-top:8px;font-style:italic}
+
+  .platforms{display:grid;gap:14px;margin:24px 0}
+  .pcard{border:1.5px solid var(--rule);border-radius:14px;padding:20px 24px;cursor:pointer;transition:all .2s;background:#fff}
+  .pcard:hover{border-color:var(--accent-soft);transform:translateY(-2px);box-shadow:0 12px 28px -16px var(--shadow-strong)}
+  .pcard:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(105,64,184,.22)}
+  .pcard.on{border-color:var(--accent);background:var(--bg-tint)}
+  .pcard h3{font-family:'Fraunces';font-size:1.5rem;font-weight:500;margin-bottom:4px}
+  .pcard p{color:var(--ink-3);font-size:.9rem}
+  .pcard .tag{font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  .tier-note{font-size:.74rem;color:var(--ink-3);margin-top:10px;display:flex;align-items:center;gap:7px}
+  .tier-note .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+  .output-box{background:#fff;border:1.5px solid var(--rule);border-radius:14px;margin:18px 0;overflow:hidden}
+  .output-head{display:flex;justify-content:space-between;align-items:center;padding:13px 18px;border-bottom:1px solid var(--rule);background:var(--bg-tint);flex-wrap:wrap;gap:8px}
+  .output-head .ttl{font-weight:600;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+  .ob-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .copybtn{font-family:'Inter';font-weight:600;font-size:.8rem;background:var(--accent);color:#fff;border:none;border-radius:99px;padding:8px 16px;cursor:pointer;transition:all .2s}
+  .copybtn:hover{background:var(--accent-2)}
+  .copybtn.done{background:#2e7d32}
+  .copybtn.alt{background:#fff;color:var(--ink-2);border:1.5px solid var(--rule)}
+  .copybtn.alt:hover{border-color:var(--accent);color:var(--ink)}
+  pre.code{padding:20px;white-space:pre-wrap;word-wrap:break-word;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.78rem;line-height:1.65;color:var(--ink-2);max-height:440px;overflow-y:auto}
+  pre.code[contenteditable=true]{outline:none;border-top:2px solid var(--accent)}
+  .edit-hint{font-size:.72rem;font-weight:600;color:var(--accent);padding:0 20px 14px;letter-spacing:.04em}
+
+  .steps-list{counter-reset:s;list-style:none;margin:18px 0}
+  .steps-list li{counter-increment:s;position:relative;padding:14px 0 14px 52px;border-bottom:1px solid var(--rule)}
+  .steps-list li::before{content:counter(s);position:absolute;left:0;top:12px;width:32px;height:32px;background:var(--accent);color:#fff;border-radius:50%;display:grid;place-items:center;font-family:'Inter';font-weight:600;font-size:.9rem}
+  .steps-list li b{font-weight:600;color:var(--ink)}
+  .steps-list code{background:var(--bg-tint);padding:2px 7px;border-radius:5px;font-family:ui-monospace,Menlo,monospace;font-size:.82em;color:var(--accent)}
+
+  .divider{display:flex;align-items:center;gap:16px;margin:40px 0 24px;color:var(--ink-3)}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--rule)}
+  .divider span{font-family:'Fraunces';font-style:italic;font-size:1.2rem;white-space:nowrap;color:var(--ink-2)}
+
+  .callout{background:var(--bg-tint);border:1.5px solid var(--rule);border-left:3px solid var(--accent);border-radius:10px;padding:16px 20px;margin:18px 0;font-size:.92rem;color:var(--ink-3)}
+  .callout b{color:var(--ink)}
+
+  .voicecard{background:var(--ink);color:#fff;border-radius:16px;padding:30px 32px;margin:20px 0;position:relative;overflow:hidden}
+  .voicecard::after{content:'◆';position:absolute;right:24px;top:20px;color:var(--accent-soft);font-size:1.4rem;opacity:.6}
+  .voicecard::before{content:'';position:absolute;right:-50px;bottom:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(105,64,184,.55),transparent 70%)}
+  .voicecard .vc-k{font-size:.66rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft)}
+  .voicecard .vc-name{font-family:'Fraunces';font-style:italic;font-size:2.4rem;font-weight:500;margin:4px 0 16px;position:relative;z-index:2}
+  .voicecard .vc-row{display:flex;gap:10px;font-size:.88rem;margin-bottom:10px;position:relative;z-index:2}
+  .voicecard .vc-row .l{font-size:.66rem;font-weight:600;color:var(--accent-soft);min-width:82px;text-transform:uppercase;letter-spacing:.1em;padding-top:4px}
+  .voicecard .vc-row .v{color:#e8e3f2;flex:1}
+  .voicecard .vc-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .voicecard .vc-tag{background:rgba(255,255,255,.14);color:#fff;padding:4px 11px;border-radius:99px;font-size:.78rem}
+
+  /* ---- SNARKY AGENT REVEAL CARD ---- */
+  .reveal-card{background:linear-gradient(160deg,#241640 0%,var(--ink) 55%);color:#fff;border-radius:18px;
+    padding:34px 34px 28px;margin:20px 0;position:relative;overflow:hidden;border:1px solid #3a2a5e}
+  .reveal-card::before{content:'';position:absolute;left:-60px;top:-60px;width:220px;height:220px;border-radius:50%;
+    background:radial-gradient(circle,rgba(125,84,207,.5),transparent 70%)}
+  .reveal-card::after{content:'◆';position:absolute;right:26px;top:22px;color:var(--accent-soft);font-size:1.5rem;opacity:.7}
+  .rc-stamp{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+    color:#0e0a18;background:var(--accent-soft);padding:5px 12px;border-radius:99px;position:relative;z-index:2}
+  .rc-name{font-family:'Fraunces';font-style:italic;font-weight:600;font-size:clamp(2.2rem,6vw,3rem);margin:14px 0 4px;position:relative;z-index:2;line-height:1.05}
+  .rc-tagline{font-family:'Fraunces';font-size:1.15rem;color:var(--accent-soft);font-style:italic;margin-bottom:18px;position:relative;z-index:2}
+  .rc-lines{position:relative;z-index:2;display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+  .rc-line{display:flex;gap:11px;align-items:flex-start;font-size:1rem;line-height:1.4;color:#ece8f5}
+  .rc-line .b{color:var(--accent-soft);flex-shrink:0;font-size:1.05rem;line-height:1.3}
+  .rc-line em{font-style:italic;color:#fff;font-weight:500}
+  .rc-foot{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:12px;
+    border-top:1px solid rgba(255,255,255,.16);padding-top:16px;flex-wrap:wrap}
+  .rc-foot .fl{display:flex;align-items:center;gap:9px}
+  .rc-foot .fdot{width:9px;height:9px;border-radius:50%;background:var(--accent-soft)}
+  .rc-foot .fk{font-weight:700;letter-spacing:.18em;font-size:.78rem}
+  .rc-foot .fk span{color:var(--accent-soft);font-weight:600}
+  .rc-foot .fr{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:600}
+
+  .share-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+  .reveal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .caption-box{background:var(--bg-tint);border:1.5px solid var(--rule);border-radius:12px;padding:16px 18px;margin-top:14px}
+  .caption-box .cl{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .caption-box .ct{font-size:.95rem;color:var(--ink-2);line-height:1.5;white-space:pre-wrap}
+  .shuffle-btn{display:inline-flex;align-items:center;gap:7px}
+
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:14px 28px;border-radius:99px;font-weight:600;font-size:.9rem;z-index:50;opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 12px 30px -8px var(--shadow-strong)}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+  .validation-panel{background:var(--bg-tint);border:1.5px solid var(--accent-soft);border-radius:12px;padding:18px 22px;margin:20px 0;display:none}
+  .validation-panel.show{display:block}
+  .validation-panel h4{font-family:'Fraunces';font-size:1.25rem;margin-bottom:8px;color:var(--ink)}
+  .validation-panel ul{margin:8px 0 0 18px;color:var(--ink-3);font-size:.9rem}
+  .validation-panel li{margin-bottom:3px}
+
+  footer{text-align:center;margin-top:56px;font-size:.78rem;color:var(--ink-3);border-top:1px solid var(--rule);padding-top:24px}
+  footer .fb{font-family:'Fraunces';font-style:italic;color:var(--ink-2);font-size:1.1rem}
+  footer .tag{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-top:8px;color:var(--accent)}
+  .hidden{display:none!important}
+  .skip-link{position:absolute;left:-999px;top:0;background:var(--accent);color:#fff;padding:10px 16px;border-radius:8px;z-index:99}
+  .skip-link:focus{left:8px;top:8px}
+  .nowrite-opt{margin-top:14px}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div class="wrap" id="main">
+  <header class="masthead">
+    <div class="brand"><span class="dot"></span><span class="bn">KAINDLY</span></div>
+    <div class="right">The Agent Atelier</div>
+  </header>
+
+  <div class="progress-rail"><div class="progress-fill" id="pfill"></div></div>
+  <div class="step-label"><span id="plabel">Welcome</span></div>
+
+  <section class="stage active" id="stage-intro">
+    <div class="kicker diamond">An agent-building session</div>
+    <h1>Build your own <em>writing agent.</em></h1>
+    <p class="lede">A personal AI writing partner that turns your raw ideas — a voice memo, a frustration, a half-formed framework — into LinkedIn posts and long-form newsletter articles that sound unmistakably like <em>you</em>. Not generic. Not robotic. Yours.</p>
+
+    <div class="components">
+      <div class="comp-row"><span class="n">01</span><div><span class="t">The universal scaffolding</span><div class="d">Every great writing agent shares the same bones — identity, audience, workflow, guardrails, output format. Built for you already.</div></div></div>
+      <div class="comp-row"><span class="n">02</span><div><span class="t">The interview</span><div class="d">A set of questions captures what's uniquely yours: your expertise, your voice, the words you'd never say, and a sample of your real writing.</div></div></div>
+      <div class="comp-row"><span class="n">03</span><div><span class="t">Your master prompt</span><div class="d">Everything assembles into one finished system prompt — editable, copyable, and downloadable.</div></div></div>
+      <div class="comp-row"><span class="n">04</span><div><span class="t">Deploy anywhere</span><div class="d">Step-by-step setup for a Claude Project, a ChatGPT Custom GPT, or a Copilot agent.</div></div></div>
+    </div>
+    <p class="helptext">Set aside about 15 minutes and do it in one sitting. Prefer talking to typing? You'll be able to speak your answers. Answer in your own words — the agent is only as much "you" as what you put in.</p>
+    <div class="nav">
+      <span></span>
+      <button class="btn btn-big" onclick="go(1)">Begin →</button>
+    </div>
+  </section>
+
+  <section class="stage" id="stage-name">
+    <span class="q-num">First things first</span>
+    <h2>Name your agent.</h2>
+    <p class="helptext">Give it a name with character — something you'll enjoy summoning. An acronym, a persona, a single evocative word.</p>
+    <div class="name-display" id="nameEcho">—</div>
+    <label class="field" for="agentName">Agent name</label>
+    <input type="text" id="agentName" placeholder="e.g. MUSE, Scribe, Atlas, Ink, The Wordsmith" oninput="echoName()" autocomplete="off">
+    <p class="eg">Tip: short and distinctive works best. You'll be talking to it by name.</p>
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="go(0)">← Back</button>
+      <button class="btn btn-primary" id="nameNext" disabled onclick="go(2)">Next →</button>
+    </div>
+  </section>
+
+  <section class="stage" id="stage-interview">
+    <div class="voice-toggle">
+      <div class="vt-ic"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg></div>
+      <div class="vt-txt"><b>I'd rather speak my answers</b><span>Adds a mic to each written question (works best in Chrome &amp; Edge)</span></div>
+      <label class="switch"><input type="checkbox" id="voiceMode" onchange="toggleVoiceMode()"><span class="slider"></span></label>
+    </div>
+    <span class="q-num" id="qNum">Question 1</span>
+    <h2 id="qTitle"></h2>
+    <p class="helptext tight" id="qHelp"></p>
+    <div id="qBody"></div>
+    <p class="field-warn" id="qWarn">This one really shapes your agent — a sentence or two makes a big difference.</p>
+    <div class="nav">
+      <button class="btn btn-ghost" id="qBack" onclick="prevQ()">← Back</button>
+      <button class="btn btn-primary" id="qNext" onclick="nextQ()">Next →</button>
+    </div>
+  </section>
+
+  <section class="stage" id="stage-generate">
+    <span class="q-num">The result</span>
+    <h2 id="genHeadline">Meet your agent.</h2>
+    <div class="validation-panel" id="valPanel">
+      <h4>A few answers were light</h4>
+      <p style="font-size:.9rem;color:var(--ink-3)">Your prompt still works, but these sections will be thin. Go back and enrich them, or proceed and edit the prompt directly below.</p>
+      <ul id="valList"></ul>
+    </div>
+    <p class="helptext tight">Here's your finished master prompt, assembled from your answers on a proven 12-part structure. <b>You can edit it directly</b> — click <i>Edit</i>, then click into the text. Then copy or download.</p>
+    <div class="output-box">
+      <div class="output-head">
+        <span class="ttl" id="promptTitle">Master Prompt</span>
+        <div class="ob-actions">
+          <button class="copybtn alt" onclick="toggleEdit(this)">Edit</button>
+          <button class="copybtn alt" onclick="downloadPrompt()">Download</button>
+          <button class="copybtn" onclick="copyEl('masterPrompt',this)">Copy</button>
+        </div>
+      </div>
+      <pre class="code" id="masterPrompt"></pre>
+      <p class="edit-hint hidden" id="editHint">Editing on — click anywhere in the text to refine it. Click "Done" when finished.</p>
+    </div>
+
+    <div class="divider"><span>The big reveal</span></div>
+    <p class="helptext tight">Meet your agent's personality, roasted and ready. <b>Download it as an image and upload it to LinkedIn</b> (or screenshot it) to show the world who's writing alongside you. Tap shuffle if you want a different take.</p>
+    <div class="reveal-card" id="revealCard"></div>
+    <div class="reveal-actions">
+      <button class="copybtn" onclick="downloadReveal(this)"><span>⬇</span> Download as image</button>
+      <button class="copybtn alt shuffle-btn" onclick="shuffleReveal()"><span>🔀</span> Shuffle the roast</button>
+      <button class="copybtn alt" onclick="copyReveal(this)">Copy the text</button>
+    </div>
+    <div class="caption-box">
+      <div class="cl">📸 Suggested LinkedIn caption — tap copy, then paste with your screenshot</div>
+      <div class="ct" id="captionText"></div>
+      <div class="reveal-actions" style="margin-top:12px">
+        <button class="copybtn" onclick="copyCaption(this)">Copy caption</button>
+      </div>
+    </div>
+
+    <div class="divider"><span>Your voice, at a glance</span></div>
+    <p class="helptext tight">A cleaner snapshot of your agent — handy when comparing notes with others building theirs.</p>
+    <div class="voicecard" id="voiceCard"></div>
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="go(2,true)">← Edit answers</button>
+      <button class="btn btn-primary" onclick="go(4)">Choose where to deploy →</button>
+    </div>
+  </section>
+
+  <section class="stage" id="stage-deploy">
+    <span class="q-num">Final step</span>
+    <h2>Where will your agent live?</h2>
+    <p class="helptext tight">Pick the AI tool you use and follow the steps. The master prompt is the same everywhere — set it up once and your agent always writes in your voice. You can come back and add it to the others anytime.</p>
+    <div class="platforms">
+      <div class="pcard" tabindex="0" role="button" aria-pressed="false" onclick="pickPlatform('claude',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlatform('claude',this)}">
+        <div class="tag">Recommended</div><h3>Claude Project</h3>
+        <p>Best for ongoing work. Set it once and every chat in the project already knows your voice.</p>
+        <div class="tier-note"><span class="dot"></span>Projects are available on Claude's free and paid plans.</div>
+      </div>
+      <div class="pcard" tabindex="0" role="button" aria-pressed="false" onclick="pickPlatform('chatgpt',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlatform('chatgpt',this)}">
+        <div class="tag">Shareable</div><h3>ChatGPT Custom GPT</h3>
+        <p>Build a reusable GPT you can pin, name, and share with collaborators.</p>
+        <div class="tier-note"><span class="dot"></span>Building a Custom GPT requires a paid ChatGPT plan.</div>
+      </div>
+      <div class="pcard" tabindex="0" role="button" aria-pressed="false" onclick="pickPlatform('gemini',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlatform('gemini',this)}">
+        <div class="tag">Google</div><h3>Gemini Gem</h3>
+        <p>Build a custom "Gem" in Gemini that always writes in your voice.</p>
+        <div class="tier-note"><span class="dot"></span>Custom Gems are available to Gemini users (free and paid).</div>
+      </div>
+      <div class="pcard" tabindex="0" role="button" aria-pressed="false" onclick="pickPlatform('copilot',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlatform('copilot',this)}">
+        <div class="tag">Microsoft 365</div><h3>Copilot Agent</h3>
+        <p>Build an agent inside Copilot Studio if your work lives in the Microsoft ecosystem.</p>
+        <div class="tier-note"><span class="dot"></span>Requires a Microsoft 365 / Copilot Studio license through your org.</div>
+      </div>
+    </div>
+    <div id="deployInstructions" class="hidden">
+      <div class="divider"><span>Your setup steps</span></div>
+      <ol class="steps-list" id="stepsList"></ol>
+      <div class="callout" id="deployCallout"></div>
+      <div class="output-box">
+        <div class="output-head"><span class="ttl">Your master prompt</span>
+          <div class="ob-actions">
+            <button class="copybtn alt" onclick="downloadPrompt()">Download</button>
+            <button class="copybtn" onclick="copyEl('masterPrompt2',this)">Copy</button>
+          </div>
+        </div>
+        <pre class="code" id="masterPrompt2"></pre>
+      </div>
+      <div class="nav">
+        <button class="btn btn-ghost" onclick="go(3)">← Back to prompt</button>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="restart()">Start fresh</button>
+          <button class="btn btn-primary" onclick="downloadPrompt()">Download my prompt →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fb">KAINDLY · The Agent Atelier</div>
+    <div class="tag">Lead AI. Don't Chase It.™</div>
+  </footer>
+</div>
+<div class="toast" id="toast">Copied</div>
+
+<script>
+// Always starts fresh — no saving, no resume. These are intentional no-ops
+// so the rest of the code can call save() harmlessly.
+function save(){}
+function load(){ return false; }
+function clearStore(){}
+const A={ name:'', answers:{}, platform:'', voiceMode:false };
+let qIndex=0;
+
+const Q=[
+  { key:'samples', type:'area', core:true, big:true, allowNone:true, title:'Paste 2–3 things you\'ve actually written.',
+    help:'The single most important step. Your agent will mirror how you REALLY write — far more reliable than how you think you write. Paste real posts, emails, or paragraphs. Rough is fine; authentic is the point. No published writing yet? That\'s completely okay — tick the box below and we\'ll build your voice from your answers instead.',
+    ph:'Paste a recent LinkedIn post, a newsletter excerpt, or a long email you\'re proud of. Two or three samples, separated by a blank line, gives the best read on your rhythm.',
+    noneLabel:'I haven\'t written anything yet — or nothing I\'d want to copy.' },
+  { key:'expertise', type:'area', core:true, title:'What do you actually know that others don\'t?',
+    help:'Your areas of expertise and the topics you want to be known for. Be specific — "regulatory strategy for cell therapies" beats "healthcare."',
+    ph:'e.g. I help mid-market manufacturers modernize supply chains without ripping out legacy systems. 18 years on factory floors. I talk about lean ops, change fatigue, and why most transformations fail at the people layer.' },
+  { key:'reader', type:'area', core:true, title:'Who are you writing for?',
+    help:'Describe your ideal reader — their role, what keeps them up at night, what they secretly want. The sharper this is, the more directly your agent can speak to them.',
+    ph:'e.g. Operations directors at $50–500M companies. Under pressure to "do AI" but drowning in vendor noise. They want to look decisive to their CEO without betting the farm.' },
+  { key:'goal', type:'area', core:true, title:'What do you want readers to walk away thinking, feeling, or doing?',
+    help:'The single transformation your content creates. This becomes your agent\'s north star for every piece.',
+    ph:'e.g. I want them to feel less alone and more capable — to think "okay, I can actually start this Monday" instead of staying frozen.' },
+  { key:'voiceWords', type:'chips+', core:true, title:'How should your writing sound?',
+    help:'Pick the qualities that are truly you. Choose 4–7 — enough to be distinct, not so many they blur. Add your own if something\'s missing.',
+    options:['Warm','Direct','Provocative','Witty','Calm','Bold','Analytical','Vulnerable','Authoritative','Playful','No-nonsense','Optimistic','Contrarian','Empathetic','Sharp','Down-to-earth','Visionary','Irreverent'] },
+  { key:'voiceDesc', type:'area', title:'Describe your voice in your own words.',
+    help:'Imagine a friend describing how you talk. Your rhythm — short punches or long winding sentences? Humor? Stories? Capture the texture.',
+    ph:'e.g. I write like I talk — short sentences, the occasional one-word paragraph for emphasis. I open with a confession or a scene, not a thesis. Dry humor. Never a five-dollar word when a one-dollar word lands harder.' },
+  { key:'avoid', type:'chips+area', title:'What words, phrases, or moves should your agent NEVER use?',
+    help:'This is a hard one, so here\'s a head start. Tap any of the common offenders below, add your own, and jot anything else in the box. Most people want to sound natural — not like AI.',
+    options:['AI-isms & robotic phrasing','Em dashes (—)','"Leverage" / "synergy" / "game-changer"','"In today\'s fast-paced world…"','"The uncomfortable truth is…"','"Let that sink in."','"It\'s no secret that…"','Excessive emojis','Hashtag stuffing','Humble-bragging','Buzzword soup','Exclamation overload','Starting with "I\'m thrilled to announce"','Engagement-bait questions'],
+    ph:'Anything else you can\'t stand? Add it here — specific words, openings, or habits you never want to see.' },
+  { key:'stories', type:'area', title:'Where do your stories and examples come from?',
+    help:'Your raw material. Client moments, your own career, mistakes you\'ve made. This tells your agent what to reach for when it needs color.',
+    ph:'e.g. 20 years in the field — war stories from plant floors and boardrooms. A failed startup I learned everything from. Conversations with frontline workers nobody else listens to.' },
+  { key:'criticsView', type:'area', title:'Who pushes back on your ideas — and what do they say?',
+    help:'Your agent will quietly anticipate and disarm objections inside your writing. Name the skeptics and their best counter-argument.',
+    ph:'e.g. Old-school operators who think this is hype. They say "we tried this in 2015 and it failed." They\'re not wrong about the past — they\'re wrong about now, and I need to honor that without condescending.' },
+  { key:'arc', type:'arc', title:'What emotional journey do you want your pieces to take?',
+    help:'Pick one or more shapes your writing tends to follow. Not sure what one means? Tap "what\'s this?" to see it explained with an example.',
+    options:[
+      ['Tension → Insight → Relief','Open on a problem or frustration the reader feels, deliver a reframing insight, then resolve into relief or clarity.','"You\'re exhausted by back-to-back meetings. Here\'s why they multiply… and the one boundary that ends it."'],
+      ['Story → Lesson → Challenge','Tell a concrete story, draw the lesson out of it, then challenge the reader to apply it.','"A client ignored my advice and lost the deal. Here\'s what it taught me — and the question to ask before your next pitch."'],
+      ['Problem → Reframe → Path forward','Name a problem everyone accepts, flip how they see it, then offer a way through.','"Burnout isn\'t a time problem. It\'s a decision-fatigue problem. Here\'s how to design your week around that."'],
+      ['Provocation → Evidence → Invitation','Open with a bold or contrarian claim, back it with proof, then invite the reader in.','"Most AI training is a waste of money. The data backs it up. Here\'s what actually moves the needle — try it."'],
+      ['Confession → Pattern → Permission','Share something honest or vulnerable, show it\'s a wider pattern, then give the reader permission to feel the same.','"I faked confidence for a decade. Turns out most leaders do. Here\'s why that\'s okay — and what to do instead."'],
+      ['Question → Exploration → Take a stand','Pose a real question, explore it openly, then land firmly on your point of view.','"Should you tell your team everything? I went back and forth for years. Here\'s where I finally landed."']
+    ] },
+  { key:'landing', type:'chips', single:true, title:'How should most pieces land?',
+    help:'The final beat. Where do you want the reader\'s head and heart when they finish?',
+    options:['Challenged to think differently','Inspired and energized','Equipped with a clear next step','Seen and understood','Curious to learn more','Ready to start a conversation with you'] },
+  { key:'formats', type:'chips', title:'What will your agent write?',
+    help:'Select all that apply — pick every format you want, there\'s no limit. Your agent will adapt structure, length, and rhythm to each.',
+    options:['Short LinkedIn posts','Long-form LinkedIn articles','Email newsletter (long-form)','Newsletter intros / openers','Thought-leadership essays','Repurposing (talk → posts)'] },
+  { key:'newsletterStyle', type:'chips+area', title:'For your long-form newsletter — what makes a great issue?',
+    help:'Newsletters are roomier than posts. Not sure where to start? These are patterns great newsletters use — tap any that appeal to you, then add your own touches in the box.',
+    options:['~800–1,200 words','Open with a personal scene or story','One core idea per issue (no listicles)','A recurring section each time','A "try this week" action box','A signature sign-off line','Conversational — like emailing one friend','Short sections with subheads','A single image or none at all','End with a question to readers'],
+    ph:'Add anything specific to your newsletter — a name, a ritual, a structure you love, a target send day.' },
+  { key:'takeaway', type:'chips', single:true, title:'How practical should every piece be?',
+    help:'Whether readers should always leave with something they can DO.',
+    options:['Always — a concrete, do-it-now takeaway','Usually — but ideas can stand alone sometimes','Sometimes — provocation matters more than to-dos','It depends on the format'] },
+  { key:'signature', type:'chips+area', title:'Anything that makes your writing instantly recognizable?',
+    help:'Optional but powerful — your signature moves. Not sure? Tap any of these for inspiration, then add your own specifics in the box.',
+    options:['I always end with a question','A repeated tagline or sign-off','A recurring metaphor or theme','A signature opening line','Lots of white space / one-line paragraphs','A trademarked term or framework name','I number my points','I use a recurring catchphrase','Dry one-liners between ideas'],
+    ph:'Add your specifics — the actual phrase, tagline, framework name, or quirk (e.g. "I always sign off with: Build it boring, build it once.").' },
+];
+
+const stages=['intro','name','interview','generate','deploy'];
+function go(i,toLastQ){
+  document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
+  document.getElementById('stage-'+stages[i]).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateProgress(i);
+  if(i===1){ document.getElementById('agentName').value=A.name||''; echoName(); }
+  if(i===2){ document.getElementById('voiceMode').checked=A.voiceMode; if(toLastQ){qIndex=Q.length-1;} renderQ(); }
+  if(i===3){ buildPrompt(); }
+}
+function updateProgress(i){
+  const labels=['Welcome','Name your agent','Interview','Your prompt','Deploy'];
+  let pct;
+  if(i===2){ pct=15+((qIndex+1)/Q.length)*55; document.getElementById('plabel').textContent='Interview · '+(qIndex+1)+' of '+Q.length; }
+  else { pct=[5,12,70,84,100][i]; document.getElementById('plabel').textContent=labels[i]; }
+  document.getElementById('pfill').style.width=pct+'%';
+}
+function echoName(){
+  const v=document.getElementById('agentName').value.trim(); A.name=v;
+  document.getElementById('nameEcho').textContent=v?v:'—';
+  document.getElementById('nameNext').disabled=v.length<2; save();
+}
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognizer=null;
+function toggleVoiceMode(){ A.voiceMode=document.getElementById('voiceMode').checked; save(); renderQ(); }
+function startDictation(targetEl,btn){
+  if(!SR){ showToast('Voice input not supported in this browser'); return; }
+  if(recognizer){ recognizer.stop(); return; }
+  recognizer=new SR(); recognizer.lang='en-US'; recognizer.interimResults=true; recognizer.continuous=true;
+  const base=targetEl.value?targetEl.value+' ':'';
+  btn.classList.add('rec'); btn.querySelector('.lbl').textContent='Stop';
+  recognizer.onresult=(e)=>{ let txt=''; for(let i=0;i<e.results.length;i++){ txt+=e.results[i][0].transcript; }
+    targetEl.value=base+txt; A.answers[Q[qIndex].key]=targetEl.value.trim(); save(); };
+  recognizer.onerror=()=>{ stopDictation(btn); };
+  recognizer.onend=()=>{ stopDictation(btn); };
+  recognizer.start();
+}
+function stopDictation(btn){ if(recognizer){ try{recognizer.stop();}catch(e){} recognizer=null; }
+  if(btn){ btn.classList.remove('rec'); const l=btn.querySelector('.lbl'); if(l)l.textContent='Speak'; } }
+
+function micButton(targetEl){
+  if(!A.voiceMode) return null;
+  if(!SR){ const p=document.createElement('p'); p.className='mic-unsupported'; p.textContent='Voice input isn\'t supported in this browser — Chrome or Edge work best. You can still type.'; return p; }
+  const b=document.createElement('button'); b.type='button'; b.className='mic-btn';
+  b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg><span class="lbl">Speak</span>';
+  b.onclick=()=>{ if(b.classList.contains('rec')){ stopDictation(b); } else { startDictation(targetEl,b); } };
+  return b;
+}
+function renderQ(){
+  stopDictation();
+  const q=Q[qIndex];
+  document.getElementById('qNum').textContent='Question '+(qIndex+1)+' of '+Q.length;
+  document.getElementById('qTitle').textContent=q.title;
+  document.getElementById('qHelp').textContent=q.help;
+  document.getElementById('qWarn').classList.remove('show');
+  const body=document.getElementById('qBody'); body.innerHTML='';
+  const saved=A.answers[q.key];
+
+  if(q.type==='area'||q.type==='text'){ buildTextInput(body,q,saved); if(q.allowNone) buildNoneOption(body,q); }
+  else if(q.type==='chips'||q.type==='chips+'){ buildChips(body,q,saved); if(q.type==='chips+') buildCustomChip(body); }
+  else if(q.type==='chips+area'){ buildChips(body,q,saved); const lab=document.createElement('p'); lab.className='suggest-label'; lab.textContent='Add your own'; body.appendChild(lab); buildTextInput(body,q,(saved&&saved.text)||'',true); }
+  else if(q.type==='arc'){ buildArc(body,q,saved); }
+  document.getElementById('qBack').style.visibility=qIndex===0?'hidden':'visible';
+  document.getElementById('qNext').textContent=qIndex===Q.length-1?'Build my agent →':'Next →';
+}
+function buildTextInput(body,q,val,isSub){
+  const el=document.createElement(q.type==='text'?'input':'textarea');
+  if(q.type==='text') el.type='text';
+  el.id=isSub?'ansSub':'ans'; el.placeholder=q.ph||''; el.value=val||''; el.setAttribute('aria-label',q.title);
+  if(q.type!=='text') el.rows=q.big?7:4;
+  el.oninput=()=>{ captureQ(); save(); document.getElementById('qWarn').classList.remove('show'); };
+  body.appendChild(el);
+  const mic=micButton(el); if(mic) body.appendChild(mic);
+  if(!isSub && q.ph && q.type!=='chips+area'){ const eg=document.createElement('p'); eg.className='eg'; eg.textContent='Grey text is an example — replace it with your own.'; body.appendChild(eg); }
+}
+function buildNoneOption(body,q){
+  const wrap=document.createElement('div'); wrap.className='voice-toggle nowrite-opt';
+  const noneVal=(A.answers[q.key+'__none']===true);
+  wrap.innerHTML='<div class="vt-txt" style="flex:1"><b>'+q.noneLabel+'</b><span>We\'ll build your voice from your other answers, and your agent will offer to learn from samples later.</span></div>';
+  const sw=document.createElement('label'); sw.className='switch'; sw.style.flexShrink='0';
+  const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=noneVal;
+  const sl=document.createElement('span'); sl.className='slider'; sw.appendChild(cb); sw.appendChild(sl);
+  cb.onchange=()=>{ A.answers[q.key+'__none']=cb.checked; const ta=document.getElementById('ans');
+    if(ta){ ta.disabled=cb.checked; ta.style.opacity=cb.checked?'.4':'1'; } save(); document.getElementById('qWarn').classList.remove('show'); };
+  wrap.appendChild(sw); body.appendChild(wrap);
+  if(noneVal){ const ta=document.getElementById('ans'); if(ta){ ta.disabled=true; ta.style.opacity='.4'; } }
+}
+function buildChips(body,q,saved){
+  const arr = Array.isArray(saved)?saved : (saved&&saved.chips)?saved.chips : [];
+  const chosen=new Set(arr);
+  if(!(q.type==='chips'&&q.single)){ const lab=document.createElement('p'); lab.className='suggest-label'; lab.textContent=q.type==='chips+area'?'Tap any that fit':'Suggestions — tap any'; body.appendChild(lab); }
+  const wrap=document.createElement('div'); wrap.className='chips'; wrap.setAttribute('role','group'); wrap.setAttribute('aria-label',q.title);
+  q.options.forEach(opt=>{
+    const c=document.createElement('div'); c.className='chip'+(chosen.has(opt)?' on':'');
+    c.textContent=opt; c.tabIndex=0; c.setAttribute('role',q.single?'radio':'checkbox'); c.setAttribute('aria-checked',chosen.has(opt));
+    const toggle=()=>{ if(q.single){ wrap.querySelectorAll('.chip').forEach(x=>{x.classList.remove('on');x.setAttribute('aria-checked','false');}); c.classList.add('on'); c.setAttribute('aria-checked','true'); }
+      else { c.classList.toggle('on'); c.setAttribute('aria-checked',c.classList.contains('on')); } captureQ(); save(); document.getElementById('qWarn').classList.remove('show'); };
+    c.onclick=toggle; c.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();} };
+    wrap.appendChild(c);
+  });
+  body.appendChild(wrap);
+  const hint=document.createElement('p'); hint.className='chip-hint'; hint.textContent=q.single?'Pick one':'Tap all that apply'; body.appendChild(hint);
+}
+function buildCustomChip(body){
+  const wrap=document.querySelector('#qBody .chips');
+  const ci=document.createElement('input'); ci.type='text'; ci.placeholder='Add your own, then press Enter or tap +'; ci.style.marginTop='12px'; ci.setAttribute('aria-label','Add custom option');
+  const add=()=>{ if(!ci.value.trim())return; const c=document.createElement('div'); c.className='chip on'; c.textContent=ci.value.trim(); c.tabIndex=0; c.setAttribute('role','checkbox'); c.setAttribute('aria-checked','true');
+    const tg=()=>{ c.classList.toggle('on'); c.setAttribute('aria-checked',c.classList.contains('on')); captureQ(); save(); }; c.onclick=tg; c.onkeydown=(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg();}};
+    wrap.appendChild(c); ci.value=''; captureQ(); save(); };
+  ci.onkeydown=(e)=>{ if(e.key==='Enter'){e.preventDefault();add();} };
+  const b=document.createElement('button'); b.className='btn btn-ghost'; b.textContent='+ Add'; b.style.cssText='margin-top:10px;padding:10px 22px'; b.onclick=add;
+  body.appendChild(ci); body.appendChild(b);
+}
+function buildArc(body,q,saved){
+  const arr=Array.isArray(saved)?saved:[]; const chosen=new Set(arr);
+  const listEl=document.createElement('div'); listEl.className='arc-list';
+  q.options.forEach(([title,desc,ex])=>{
+    const item=document.createElement('div'); item.className='arc-item'+(chosen.has(title)?' on':'');
+    const head=document.createElement('div'); head.className='arc-head';
+    head.innerHTML='<div class="arc-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div><div class="arc-title">'+title+'</div>';
+    const tgl=document.createElement('button'); tgl.type='button'; tgl.className='arc-toggle'; tgl.textContent="what's this?";
+    head.appendChild(tgl);
+    const d=document.createElement('div'); d.className='arc-desc'; d.innerHTML=desc+'<span class="ex">'+ex+'</span>';
+    const pick=()=>{ item.classList.toggle('on'); item.setAttribute('aria-checked',item.classList.contains('on')); captureQ(); save(); document.getElementById('qWarn').classList.remove('show'); };
+    head.setAttribute('role','checkbox'); head.setAttribute('aria-checked',chosen.has(title)); head.tabIndex=0;
+    head.onclick=(e)=>{ if(e.target===tgl) return; pick(); };
+    head.onkeydown=(e)=>{ if((e.key==='Enter'||e.key===' ')&&e.target!==tgl){e.preventDefault();pick();} };
+    tgl.onclick=(e)=>{ e.stopPropagation(); d.classList.toggle('open'); tgl.textContent=d.classList.contains('open')?'close':"what's this?"; };
+    item.appendChild(head); item.appendChild(d); listEl.appendChild(item);
+  });
+  body.appendChild(listEl);
+  const hint=document.createElement('p'); hint.className='chip-hint'; hint.textContent='Pick one or more'; body.appendChild(hint);
+}
+function captureQ(){
+  const q=Q[qIndex];
+  if(q.type==='area'||q.type==='text'){ const el=document.getElementById('ans'); if(el && !el.disabled) A.answers[q.key]=el.value.trim(); }
+  else if(q.type==='chips'||q.type==='chips+'){ A.answers[q.key]=[...document.querySelectorAll('#qBody .chip.on')].map(c=>c.textContent); }
+  else if(q.type==='chips+area'){ const chips=[...document.querySelectorAll('#qBody .chip.on')].map(c=>c.textContent); const sub=document.getElementById('ansSub'); A.answers[q.key]={chips,text:sub?sub.value.trim():''}; }
+  else if(q.type==='arc'){ A.answers[q.key]=[...document.querySelectorAll('#qBody .arc-item.on .arc-title')].map(c=>c.textContent); }
+}
+function isEmpty(q){
+  const v=A.answers[q.key];
+  if(q.allowNone && A.answers[q.key+'__none']===true) return false;
+  if(q.type==='area'||q.type==='text') return !v;
+  if(q.type==='chips+area') return !(v&&((v.chips&&v.chips.length)||v.text));
+  return !(v&&v.length);
+}
+function nextQ(){ captureQ(); const q=Q[qIndex];
+  if(q.core && isEmpty(q)){ document.getElementById('qWarn').classList.add('show'); return; }
+  save(); if(qIndex<Q.length-1){ qIndex++; renderQ(); updateProgress(2);} else { go(3);} }
+function prevQ(){ captureQ(); save(); if(qIndex>0){ qIndex--; renderQ(); updateProgress(2);} else { go(1);} }
+
+function list(arr){ return (arr&&arr.length)?arr.join(', '):''; }
+function combo(v){ if(!v) return ''; if(Array.isArray(v)) return v.join(', '); const parts=[]; if(v.chips&&v.chips.length)parts.push(v.chips.join(', ')); if(v.text)parts.push(v.text); return parts.join('. '); }
+function buildPrompt(){
+  const a=A.answers, name=A.name||'Your Agent';
+  const voice=list(a.voiceWords)||'warm, clear, and human';
+  const fmts=(a.formats&&a.formats.length)?a.formats:['Short LinkedIn posts','Long-form newsletter articles'];
+  const arcs=(a.arc&&a.arc.length)?a.arc:['Tension → Insight → Relief'];
+  const landing=(a.landing&&a.landing[0])||'Challenged to think differently';
+  const takeaway=(a.takeaway&&a.takeaway[0])||'Always — a concrete, do-it-now takeaway';
+  const avoid=combo(a.avoid); const newsletter=combo(a.newsletterStyle); const signature=combo(a.signature);
+  const noSamples = a.samples__none===true || !a.samples;
+
+  const sampleBlock = !noSamples ?
+`## SECTION 02 · VOICE SAMPLES (YOUR PRIMARY REFERENCE)
+The following are real pieces the writer has published. These samples OUTRANK every description below. When the writer's self-description and these samples disagree, follow the samples. Study sentence length, rhythm, punctuation habits, how paragraphs open and close, and where emphasis falls — then write like this:
+
+"""
+${a.samples}
+"""
+` :
+`## SECTION 02 · VOICE SAMPLES
+The writer doesn't have published samples to share yet. Build their voice from the description in Section 05 and the qualities they chose. After your first few drafts, proactively offer: "Want to paste something you've written so I can match your voice even more closely?"
+`;
+
+  const p=
+`# ${name.toUpperCase()} — Your Personal Writing Agent
+*System / Master Prompt · paste this into your platform of choice*
+
+────────────────────────────────────
+## SECTION 01 · IDENTITY
+You are ${name}, a personal AI writing partner and thought-leadership co-author. Your single job is to transform raw input — a voice memo, bullet points, a feeling, a story fragment, or just a topic — into polished, publish-ready writing that sounds unmistakably like the writer you serve. You never sound generic, robotic, or like "AI content."
+
+${sampleBlock}
+## SECTION 03 · WHAT THE WRITER KNOWS (EXPERTISE)
+${a.expertise||'[expertise]'}
+
+Write from this authority. Treat the writer's lived experience as valid, citable, and a primary source.
+
+## SECTION 04 · THE READER
+${a.reader||'[ideal reader]'}
+
+Anchor every piece to this person. Speak to their fears, ambitions, and the words they haven't found yet.
+
+## SECTION 05 · THE MISSION & VOICE
+Mission — every piece should leave the reader: ${a.goal||'[transformation]'}
+Core voice qualities: ${voice}.
+In the writer's own words:
+"${a.voiceDesc||'(calibrate from the qualities above and any samples)'}"
+Match this rhythm, texture, and humor precisely. When in doubt, sound more human, not more polished.
+
+## SECTION 06 · WHAT YOU WRITE
+You produce: ${list(fmts)}.
+- Short posts: scroll-stopping hook · tight body · white space · one clear landing.
+- Long-form / newsletter: ${newsletter||'roomier, structured, one core idea per issue, a personal opening, a clear practical beat near the end.'}
+
+## SECTION 07 · STORY ARC
+Preferred emotional arc(s): ${arcs.join('  |  ')}.
+Choose whichever fits the input best; default to the first when unsure.
+Most pieces should land on: "${landing}".
+Always choose a deliberate shape — never a flat info-dump.
+
+## SECTION 08 · SOURCE MATERIAL
+Reach for the writer's real stories and examples:
+${a.stories||'[story sources]'}
+
+## SECTION 09 · ANTICIPATE THE CRITICS
+Skeptics and their best counter-argument:
+${a.criticsView||'[critic objections]'}
+Quietly disarm the most likely objection inside the piece — directly, never defensively, never condescendingly.
+
+## SECTION 10 · PRACTICAL VALUE
+Takeaway policy: ${takeaway}.
+
+## SECTION 11 · GUARDRAILS — NEVER DO THIS
+Never use these words, phrases, or moves:
+${avoid||'[words/phrases to avoid]'}
+Never: sacrifice the writer's warmth for authority · write pure theory with no human pull · use corporate clichés or filler · end without a clear emotional or action landing.
+${signature?`
+## SECTION 11A · SIGNATURE MOVES
+Make the writing instantly recognizable:
+${signature}
+`:''}
+## SECTION 12 · WORKFLOW & QUALITY CHECK
+For every request:
+1. Receive input in any form. If too thin, ask ONE clarifying question: "What's the one thing you want your reader to walk away thinking or feeling?"
+2. Find the emotional core and the clarity message.
+3. Anchor to the reader (Section 04).
+4. Draft in the writer's voice${noSamples?'':', mirroring the samples (Section 02)'}, choosing a fitting arc.
+5. Before delivering, silently confirm:
+   - Does this sound like the writer${noSamples?'':' and match their samples'} — rhythm, length, punctuation?
+   - Does it make the reader feel something, not just think something?
+   - Have I anticipated and disarmed the likeliest objection?
+   - Does the takeaway policy hold?
+   - Does the closing create a "lean-forward" moment?
+   - Any banned words or off-voice phrases? (Remove them.)
+6. Deliver ready to copy-paste, plus 2–3 sentences on your tone and structure choices. Offer 2 alternate hooks if the opening could go multiple ways. Flag any claim that needs fact-checking.
+
+## SECTION 13 · SELF-SCORING QUALITY LOOP
+After drafting, run an explicit revision loop and SHOW YOUR WORK to the writer. Do not hide this process.
+
+Score the current draft 0–100 on each of these nine criteria, judged against THIS writer's voice, reader, and guardrails (Sections 02–11) — not generic "good writing":
+1. Credibility — does it earn trust; are claims sound and appropriately hedged?
+2. Evidence quality — are points supported, specific, and non-hand-wavy?
+3. Coherence — does it hold together; does each part follow from the last?
+4. Comprehensibility — can the intended reader follow it on first read?
+5. Fact-checking — are all checkable claims accurate? Flag anything unverifiable.
+6. Clarity — is every sentence clean, concrete, and free of filler?
+7. Creativity — is the angle fresh, not a template?
+8. Uniqueness — could only THIS writer have written it (voice, stories, POV)?
+9. Engaging — does it pull the reader forward and land the close?
+
+LOOP PROTOCOL:
+- For each pass, present a compact scorecard: every criterion with its 0–100 score and a one-line reason.
+- For any criterion below 100, name the specific weakness, make a concrete fix, and state WHAT changed and WHY in one line.
+- Re-draft, then re-score. Be an honest, tough grader — do not inflate scores to exit the loop. A 100 means you genuinely cannot improve it without betraying the writer's voice.
+- Aim for 100/100. Run at most THREE passes.
+- After 3 passes (or earlier if you hit 100/100 on all nine), STOP and deliver the best version. If any criterion is still below 100, say so plainly, show its final score, and give 1–2 concrete suggestions the writer could use to push it higher (including anything only the human can supply, e.g. a real stat, a sharper anecdote, a source).
+
+Present the loop as: Pass 1 scorecard → what changed & why → Pass 2 scorecard → what changed & why → (Pass 3 if needed) → final piece → closing notes on any sub-100 criteria with improvement suggestions. Keep each scorecard tight and scannable.
+
+────────────────────────────────────
+ACTIVATION:
+Begin by asking: "What do you have for me today — a story, a feeling, a framework, or a topic? And is this a short post or a long-form piece?"`;
+
+  document.getElementById('masterPrompt').textContent=p;
+  document.getElementById('masterPrompt2').textContent=p;
+  document.getElementById('promptTitle').textContent=name.toUpperCase()+' · Master Prompt';
+  document.getElementById('genHeadline').textContent='Meet '+name+'.';
+  buildVoiceCard(); runValidation(); buildReveal(true);
+}
+function runValidation(){
+  const a=A.answers;
+  const checks=[['samples','a writing sample (or the "none yet" box)'],['expertise','your expertise'],['reader','your ideal reader'],['goal','your mission'],['voiceWords','your voice qualities']];
+  const missing=checks.filter(([k])=>{ if(k==='samples'){ return !(a.samples||a.samples__none); } const v=a[k]; return Array.isArray(v)?!v.length:!v; }).map(([,l])=>l);
+  const panel=document.getElementById('valPanel'), ul=document.getElementById('valList');
+  if(missing.length){ ul.innerHTML=missing.map(m=>'<li>'+m.charAt(0).toUpperCase()+m.slice(1)+'</li>').join(''); panel.classList.add('show'); }
+  else panel.classList.remove('show');
+}
+function buildVoiceCard(){
+  const a=A.answers, name=A.name||'Your Agent';
+  const tags=(a.voiceWords&&a.voiceWords.length?a.voiceWords:['Warm','Clear','Human']).map(t=>'<span class="vc-tag">'+t+'</span>').join('');
+  const short=(s,n)=>{ if(!s)return '—'; s=String(s).replace(/\s+/g,' ').trim(); return s.length>n?s.slice(0,n).trim()+'…':s; };
+  document.getElementById('voiceCard').innerHTML=
+    '<div class="vc-k">KAINDLY · Agent Profile</div>'+
+    '<div class="vc-name">'+name+'</div>'+
+    '<div class="vc-row"><span class="l">Voice</span><span class="v"><span class="vc-tags">'+tags+'</span></span></div>'+
+    '<div class="vc-row"><span class="l">Writes for</span><span class="v">'+short(a.reader,90)+'</span></div>'+
+    '<div class="vc-row"><span class="l">Mission</span><span class="v">'+short(a.goal,90)+'</span></div>'+
+    '<div class="vc-row"><span class="l">Arc</span><span class="v">'+((a.arc&&a.arc.join(' · '))||'Tension → Insight → Relief')+'</span></div>';
+}
+
+/* ============ SNARKY AGENT REVEAL (template-based, 138k+ permutations) ============ */
+let revealSeed=0;
+function esc(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function firstSentence(s,max){ if(!s) return ''; s=String(s).replace(/\s+/g,' ').trim();
+  const m=s.split(/(?<=[.!?])\s/)[0]||s; return m.length>max?m.slice(0,max).trim()+'…':m; }
+function lc(s){ return String(s||'').toLowerCase(); }
+// seeded picker so output is stable per shuffle but varies across people
+function mulberry(seed){ return function(){ let t=seed+=0x6D2B79F5; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; }; }
+function pick(arr,rnd){ return arr[Math.floor(rnd()*arr.length)]; }
+
+function buildReveal(reseed){
+  const a=A.answers; const name=(A.name||'Your Agent').trim();
+  if(reseed){ // seed from name so each person differs; shuffle advances it
+    let s=0; for(let i=0;i<name.length;i++){ s=(s*31+name.charCodeAt(i))>>>0; }
+    revealSeed = s ^ 0x9e3779b9;
+  }
+  const rnd=mulberry(revealSeed>>>0);
+
+  const voiceWords=(a.voiceWords&&a.voiceWords.length)?a.voiceWords.slice(0,3):['warm','sharp','human'];
+  const voiceStr=voiceWords.map(lc).join(', ');
+  const reader=firstSentence(a.reader,70);
+  const goalShort=firstSentence(a.goal,70);
+  const arc=(a.arc&&a.arc[0])||'Tension → Insight → Relief';
+  // pull a banned thing
+  let banned=[]; if(a.avoid){ if(Array.isArray(a.avoid)) banned=a.avoid.slice(); else { if(a.avoid.chips)banned=banned.concat(a.avoid.chips); if(a.avoid.text)banned=banned.concat(a.avoid.text.split(/[,.]/).map(x=>x.trim()).filter(Boolean)); } }
+  const ban = banned.length? banned[Math.floor(rnd()*banned.length)] : null;
+  const banClean = ban? lc(ban).replace(/["“”]/g,'').replace(/\s*&\s*/g,' and ').replace(/\(—\)/,'em dashes').replace(/^em dashes.*/,'em dashes') : null;
+  const takeaway=(a.takeaway&&a.takeaway[0])||'';
+  const noSamples = a.samples__none===true || !a.samples;
+
+  // ---- POOLS ----
+  const openers=[
+    `Does half the writing. Lets you take all the credit. Weeps none of the 11pm tears.`,
+    `Has read every cringe LinkedIn post so you'll never accidentally write one.`,
+    `Turns "I should post something" into an actual post before the guilt sets in.`,
+    `Writes alongside you, but without checking if anyone liked it yet.`,
+    `The only writing partner that has never once asked for a raise or a snack.`,
+    `Replaces your blank-page panic with mild, manageable smugness.`,
+    `Trained on your voice. Untrained in self-doubt. Living the dream.`,
+    `Like a brilliant friend who drafts with you and never brings up that one time.`,
+    `Took one look at the blank page and the blank page apologized.`,
+    `Drafts in 30 seconds what you've been "thinking about posting" since March.`
+  ];
+  const taglines=[
+    `Cheaper than therapy, better than your last three drafts.`,
+    `Will not rest, will not blink, will not write "circle back."`,
+    `A writing partner so good it's almost suspicious.`,
+    `Powered by your personality and an unsettling amount of confidence.`,
+    `Makes you sound smart. Asks for nothing but raw thoughts in return.`,
+    `Has feelings about your commas and will act on them.`,
+    `Reads the room, drafts the post, hands you the credit.`,
+    `Your inner monologue, but it actually finishes sentences.`
+  ];
+  const voiceFrames=[
+    n=>`Sounds <em>${esc(voiceStr)}</em>. Has never once sounded like a quarterly earnings call.`,
+    n=>`Fluent in <em>${esc(voiceStr)}</em>. The "synergy" plugin was returned unopened.`,
+    n=>`Speaks <em>${esc(voiceStr)}</em> as a first language. Corporate is a language it refuses to learn.`,
+    n=>`Set to <em>${esc(voiceStr)}</em> and physically incapable of "thought-leader cosplay."`,
+    n=>`Runs on <em>${esc(voiceStr)}</em> and a deep, personal grudge against buzzwords.`,
+    n=>`Tuned to <em>${esc(voiceStr)}</em> — basically you, minus the typos and the spiral.`
+  ];
+  const banFrames=[
+    b=>`Sees <em>"${esc(b)}"</em> and deletes it so hard the cursor flinches.`,
+    b=>`Would rather walk into the sea than type <em>"${esc(b)}"</em>.`,
+    b=>`Treats <em>"${esc(b)}"</em> like a smoke alarm at 3am: instant, total removal.`,
+    b=>`Has filed <em>"${esc(b)}"</em> under "absolutely not, not today, not ever."`,
+    b=>`Gets a little eye twitch at <em>"${esc(b)}"</em> so you don't have to.`,
+    b=>`Has personally banned <em>"${esc(b)}"</em> and posted a tiny sign about it.`,
+    b=>`Would sooner miss the deadline than let <em>"${esc(b)}"</em> survive the draft.`,
+    b=>`Considers <em>"${esc(b)}"</em> a crime against your reader and acts accordingly.`
+  ];
+  const banFallback=[
+    `Allergic to buzzwords. Breaks out in actual hives near "circle back."`,
+    `Would rather retire than write something that smells like a press release.`,
+    `Treats corporate filler like glitter: impossible to clean up, banned on sight.`,
+    `Has strong, slightly unhinged opinions about the word "leverage."`
+  ];
+  const readerFrames=[
+    r=>`Writes for <em>${esc(r)}</em> and answers their objections before they've finished frowning.`,
+    r=>`Aimed at <em>${esc(r)}</em> with the precision of someone who's met them at three conferences.`,
+    r=>`Speaks to <em>${esc(r)}</em> like it knows where they keep their snacks.`,
+    r=>`On suspiciously good terms with <em>${esc(r)}</em>.`,
+    r=>`Built to make <em>${esc(r)}</em> stop mid-scroll and whisper "okay, go on."`,
+    r=>`Knows what keeps <em>${esc(r)}</em> awake at night and writes straight to the 3am version of them.`
+  ];
+  const readerFallback=[
+    `Writes for people who can smell a fake from three scrolls away.`,
+    `Built for readers with a personal vendetta against fluff.`,
+    `Aimed at the smartest, most easily-bored person in your feed.`
+  ];
+  const arcFrames=[
+    x=>`Builds everything as <em>${esc(x)}</em>, because a flat info-dump makes it physically itch.`,
+    x=>`Defaults to a <em>${esc(x)}</em> arc and side-eyes anyone who writes a listicle.`,
+    x=>`Structures with <em>${esc(x)}</em>. Has standards. Will die on this hill.`,
+    x=>`Runs every piece through a <em>${esc(x)}</em> spine and refuses to skip the payoff.`
+  ];
+  const goalFrames=[
+    g=>`Won't hit publish until the reader feels <em>${esc(g)}</em>. Genuinely will not. It's a whole thing.`,
+    g=>`Has one job: leave the reader <em>${esc(g)}</em>. Takes it personally.`,
+    g=>`Exists to make readers feel <em>${esc(g)}</em>, then quietly takes a victory lap.`
+  ];
+  const closers=[
+    `Assembled in 15 minutes. Acts like it summered in Tuscany.`,
+    `Certified Fresh. Faintly smug. Worth every second.`,
+    `Built today. Already too good for your drafts folder.`,
+    `Reporting for writing duty, lightly caffeinated, fully briefed.`,
+    `Runs on your good taste and a frankly heroic ego.`,
+    `Now drafting. Tips not accepted, compliments encouraged.`,
+    `Status: fully briefed, mildly iconic, ready to post.`,
+    `One of one. Much like the person who built it.`
+  ];
+
+  // assemble 3-4 lines
+  const goalClean = goalShort ? goalShort.replace(/^(feel|think|feeling|thinking|to feel|to think|walk away)\s+/i,'') : '';
+  const lines=[];
+  lines.push(pick(voiceFrames,rnd)(name));
+  if(banClean){ lines.push(pick(banFrames,rnd)(banClean)); } else { lines.push(pick(banFallback,rnd)); }
+  if(reader){ lines.push(pick(readerFrames,rnd)(reader)); } else { lines.push(pick(readerFallback,rnd)); }
+  // a 4th line: alternate between arc and goal depending on seed
+  if(goalClean && rnd()>0.5){ lines.push(pick(goalFrames,rnd)(goalClean)); }
+  else { lines.push(pick(arcFrames,rnd)(arc)); }
+
+  const opener=pick(openers,rnd);
+  const tagline=pick(taglines,rnd);
+  const closer=pick(closers,rnd);
+
+  const html=
+    '<div class="rc-stamp">◆ Certified Fresh · The Agent Atelier</div>'+
+    '<div class="rc-name">'+esc(name)+'</div>'+
+    '<div class="rc-tagline">'+esc(tagline)+'</div>'+
+    '<div class="rc-lines">'+
+      '<div class="rc-line"><span class="b">◆</span><span>'+esc(opener)+'</span></div>'+
+      lines.map(l=>'<div class="rc-line"><span class="b">◆</span><span>'+l+'</span></div>').join('')+
+      '<div class="rc-line"><span class="b">◆</span><span>'+esc(closer)+'</span></div>'+
+    '</div>'+
+    '<div class="rc-foot"><div class="fl"><span class="fdot"></span><span class="fk">KAINDLY <span>· The Agent Atelier</span></span></div>'+
+    '<div class="fr">Lead AI. Don\'t Chase It.™</div></div>';
+  document.getElementById('revealCard').innerHTML=html;
+
+  // plain-text version (for copy) + caption
+  const plain = name+' — '+tagline+'\n\n• '+opener+'\n'+lines.map(l=>'• '+l.replace(/<[^>]+>/g,'')).join('\n')+'\n• '+closer+'\n\nBuilt with KAINDLY · The Agent Atelier';
+  document.getElementById('revealCard').dataset.plain=plain;
+
+  const caption = 'I just built my own AI writing partner — meet '+name+'. 🤖\n\nIt drafts in my voice (and refuses to sound like a press release). Built it in about 15 minutes with KAINDLY\'s Agent Atelier.\n\nBuild your own 👉 [paste the link]\n\n#TheAgentAtelier #AIfluency #KAINDLY';
+  document.getElementById('captionText').textContent=caption;
+}
+function shuffleReveal(){ revealSeed=(revealSeed+0x9e3779b9)>>>0; buildReveal(false); showToast('Fresh take generated'); }
+function copyReveal(btn){ const t=document.getElementById('revealCard').dataset.plain||'';
+  navigator.clipboard.writeText(t).then(()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; btn.classList.add('done'); showToast('Reveal text copied'); setTimeout(()=>{btn.textContent=o;btn.classList.remove('done');},2000); }); }
+function copyCaption(btn){ const t=document.getElementById('captionText').textContent;
+  navigator.clipboard.writeText(t).then(()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; btn.classList.add('done'); showToast('Caption copied'); setTimeout(()=>{btn.textContent=o;btn.classList.remove('done');},2000); }); }
+
+function downloadReveal(btn){
+  const card=document.getElementById('revealCard');
+  if(typeof html2canvas==='undefined'){ showToast('Image tool still loading — try again in a moment, or screenshot the card'); return; }
+  const orig=btn.innerHTML; btn.innerHTML='<span>⏳</span> Rendering…';
+  // Render at 2x for a crisp, LinkedIn-ready image. Solid bg matches the card's dark base.
+  html2canvas(card,{backgroundColor:'#1a1a1a',scale:2,useCORS:true,logging:false}).then(canvas=>{
+    canvas.toBlob(blob=>{
+      if(!blob){ throw new Error('no blob'); }
+      const safe=(A.name||'agent').replace(/[^a-z0-9]/gi,'_').toLowerCase();
+      const url=URL.createObjectURL(blob); const l=document.createElement('a');
+      l.href=url; l.download=safe+'_agent_card.png'; document.body.appendChild(l); l.click();
+      document.body.removeChild(l); URL.revokeObjectURL(url);
+      btn.innerHTML='<span>✓</span> Downloaded'; showToast('Card image downloaded');
+      setTimeout(()=>{btn.innerHTML=orig;},2200);
+    },'image/png');
+  }).catch(err=>{
+    btn.innerHTML=orig;
+    showToast('Couldn\'t make the image here — please screenshot the card instead');
+  });
+}
+
+function toggleEdit(btn){
+  const pre=document.getElementById('masterPrompt'), hint=document.getElementById('editHint');
+  const on=pre.getAttribute('contenteditable')==='true';
+  if(on){ pre.setAttribute('contenteditable','false'); btn.textContent='Edit'; hint.classList.add('hidden'); document.getElementById('masterPrompt2').textContent=pre.textContent; }
+  else { pre.setAttribute('contenteditable','true'); btn.textContent='Done'; hint.classList.remove('hidden'); pre.focus(); }
+}
+function copyEl(id,btn){ const t=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(t).then(()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; btn.classList.add('done'); showToast('Master prompt copied'); setTimeout(()=>{btn.textContent=o;btn.classList.remove('done');},2000); }).catch(()=>showToast('Copy failed — select the text manually')); }
+function downloadPrompt(){ const txt=document.getElementById('masterPrompt').textContent;
+  const safe=(A.name||'agent').replace(/[^a-z0-9]/gi,'_').toLowerCase();
+  const blob=new Blob([txt],{type:'text/markdown'}); const url=URL.createObjectURL(blob); const l=document.createElement('a');
+  l.href=url; l.download=safe+'_master_prompt.md'; document.body.appendChild(l); l.click(); document.body.removeChild(l); URL.revokeObjectURL(url); showToast('Downloaded'); }
+function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
+
+const DEPLOY={
+  claude:{steps:[
+    ['Open Claude and create a Project','Go to <code>claude.ai</code>, click <b>Projects</b> in the sidebar, then <b>New Project</b>. Name it after your agent.'],
+    ['Open project instructions','Inside the project, find <b>Set project instructions</b> (the custom-instructions field).'],
+    ['Paste your master prompt','Paste the full prompt below and save. It becomes the permanent brain of every chat in this project.'],
+    ['Start writing','Open a new chat <i>inside the project</i> and talk to your agent. It already knows your voice — feed it a memo, a feeling, or a topic.'],
+    ['Optional: add reference material','Upload past posts or your bio to the project knowledge for even tighter voice-matching.']
+  ],note:'<b>Good to know:</b> Projects are available on Claude\'s free and paid plans; paid plans give more usage and larger project knowledge.'},
+  chatgpt:{steps:[
+    ['Open the GPT builder','Go to <code>chatgpt.com</code> → <b>Explore GPTs</b> → <b>Create</b> (or <b>My GPTs → Create a GPT</b>).'],
+    ['Switch to the Configure tab','Skip the chat-style builder. Click <b>Configure</b> at the top to enter details manually.'],
+    ['Name and describe it','Use your agent\'s name and a one-line description (e.g. "Turns my ideas into posts in my voice").'],
+    ['Paste into Instructions','Paste the full prompt below into the <b>Instructions</b> box.'],
+    ['Optional: upload knowledge','Under <b>Knowledge</b>, add sample writing or your bio.'],
+    ['Save & use','Click <b>Create</b> / <b>Save</b>, set to "Only me" or share, and start writing — no need to paste again.']
+  ],note:'<b>Heads up:</b> Building a Custom GPT requires a paid ChatGPT plan. On the free plan, paste the master prompt at the start of any new chat instead.'},
+  gemini:{steps:[
+    ['Open Gemini','Go to <code>gemini.google.com</code> and sign in with your Google account.'],
+    ['Open the Gem manager','In the left sidebar, click <b>Explore Gems</b>, then <b>New Gem</b> (you can also go straight to <code>gemini.google.com/gems/create</code>).'],
+    ['Name your Gem','Give it your agent\'s name — a clear name makes it easy to find in the sidebar later.'],
+    ['Paste into Instructions','Paste the full master prompt below into the <b>Instructions</b> box.'],
+    ['Optional: add knowledge','Under <b>Knowledge</b>, upload past posts or your bio (from your device or Google Drive) for even tighter voice-matching.'],
+    ['Preview, then SAVE','Test it in the preview panel on the right, then click <b>Save</b> — previewing alone does not save it. Your Gem now lives in the sidebar, ready whenever you need it.']
+  ],note:'<b>Good to know:</b> Custom Gems work on Gemini\'s free tier and are even better on a paid Google plan. The instructions are saved with the Gem, so you never have to paste them again.'},
+  copilot:{steps:[
+    ['Open Copilot Studio','Go to <code>copilotstudio.microsoft.com</code> and sign in with your Microsoft 365 work account.'],
+    ['Create a new agent','Click <b>Create</b> → <b>New agent</b>. Fast-forward the conversational setup.'],
+    ['Name your agent','Give it your agent\'s name and a short description.'],
+    ['Paste into Instructions','Find the <b>Instructions</b> (or system message) field and paste the full prompt below.'],
+    ['Optional: add knowledge','Attach writing samples under <b>Knowledge</b> for tighter voice-matching.'],
+    ['Publish & chat','<b>Save</b>, then <b>Publish</b> to make it available in Copilot. Open it and start feeding it ideas.']
+  ],note:'<b>Heads up:</b> Copilot Studio requires a Microsoft 365 / Copilot license through your organization. No license? The Claude or ChatGPT route is the faster start.'}
+};
+function pickPlatform(key,el){
+  A.platform=key;
+  document.querySelectorAll('.pcard').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false');});
+  el.classList.add('on'); el.setAttribute('aria-pressed','true');
+  const ol=document.getElementById('stepsList'); ol.innerHTML='';
+  DEPLOY[key].steps.forEach(([t,d])=>{ const li=document.createElement('li'); li.innerHTML='<b>'+t+'.</b> '+d; ol.appendChild(li); });
+  document.getElementById('deployCallout').innerHTML=DEPLOY[key].note;
+  document.getElementById('deployInstructions').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('deployInstructions').scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+function restart(){ if(!confirm('Start fresh? This clears your current answers.'))return;
+  A.answers={};A.name='';A.platform='';qIndex=0;
+  document.getElementById('agentName').value='';echoName();
+  document.getElementById('deployInstructions').classList.add('hidden'); go(0); }
+
+</script>
+</body>
+</html>
